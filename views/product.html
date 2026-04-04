@@ -47,6 +47,7 @@
 
           <form action="/deleteProduct" method="POST" style="display:inline;">
             <input type="hidden" name="item" value="{{item}}">
+            <input type="hidden" name="username" value="{{username}}">
             <button type="submit">Delete</button>
           </form>
         </td>
@@ -56,6 +57,7 @@
 
        <h3>Add Product</h3>
     <form action="/addProduct" method="POST">
+      <input type="hidden" name="username" value="{{username}}">
       <input name="item" placeholder="Item" required>
       <input name="price" placeholder="Price" required>
       <input name="amount_sold" placeholder="Sold" required>
@@ -91,6 +93,7 @@
           <td>
           <form action="/deleteStore" method="POST" style="display:inline;">
             <input type="hidden" name="name" value="{{name}}">
+            <input type="hidden" name="username" value="{{username}}">
             <button type="submit">Delete</button>
           </form>
         </td>
@@ -100,6 +103,7 @@
 
      <h3>Add Store</h3>
     <form action="/addStore" method="POST">
+      <input type="hidden" name="username" value="{{username}}">
       <input name="name" placeholder="Name" required>
       <input name="customers_served" placeholder="Customers Served" required>
       <input name="products_stocked" placeholder="Products Stocked" required>
@@ -163,9 +167,9 @@ document.querySelectorAll(".saveBtn").forEach(btn => {
 <h2>How much should I stock?</h2>
 
 <form action="/stockCalculator" method="POST">
+  <input type="hidden" name="username" value="{{username}}">
   <label>Item Name:</label>
   <input type="text" name="item" required>
-
   <button type="submit">Calculate</button>
 </form>
 
@@ -181,6 +185,7 @@ document.querySelectorAll(".saveBtn").forEach(btn => {
 <h2>Yearly Sales Revenue Calculator</h2>
 
 <form action="/revenueCalculator" method="POST">
+  <input type="hidden" name="username" value="{{username}}">
   <label>Product Name:</label>
   <input type="text" name="item" required>
   <button type="submit">Calculate Revenue</button>
@@ -198,3 +203,4 @@ document.querySelectorAll(".saveBtn").forEach(btn => {
 <a href="/dashboard?username={{username}}">Dashboard</a>
 
 </html>
+
