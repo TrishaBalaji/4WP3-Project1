@@ -2,12 +2,51 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Product</title>
   </head>
+  <style>
+    /* Base styles */
+    input, button {
+      padding: 8px;
+      margin: 4px 0;
+    }
+
+    /* Responsive styles */
+    @media screen and (max-width: 768px) {
+
+      /* Stack form elements */
+      form input,
+      form button {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+      }
+
+      /* Table scroll */
+      .table-container {
+        overflow-x: auto;
+        width: 100%;
+      }
+
+      table {
+        min-width: 700px;
+      }
+
+      /* Smaller spacing */
+      body {
+        margin: 10px;
+      }
+    }
+  </style>
+  
   <body>
     <h1>Welcome to the Product page, {{username}}!</h1>
+      <img src="/grocery.jfif" alt="Grocery Cart" class="hero-img">
 
     <h2>Products</h2>
+    <div class="table-container">
     <table border="1">
       <tr>
         <th>Item</th>
@@ -30,7 +69,7 @@
     <td class="view">{{popularity}}</td>
     <td class="view">{{competitors}}</td>
 
-    <!-- Edit mode inputs -->
+    <!-- Edit inputs -->
     <td class="edit" style="display:none;">
       <input name="price" value="{{price}}">
       <input name="amount_sold" value="{{amount_sold}}">
@@ -54,23 +93,29 @@
       </tr>
       {{/products}}
     </table>
+    </div>
 
        <h3>Add Product</h3>
-    <form action="/addProduct" method="POST">
-      <input type="hidden" name="username" value="{{username}}">
-      <input name="item" placeholder="Item" required>
-      <input name="price" placeholder="Price" required>
-      <input name="amount_sold" placeholder="Sold" required>
-      <input name="amount_stocked" placeholder="Stocked" required>
-      <input name="discounts" placeholder="Discount">
-      <input name="popularity" placeholder="Popularity">
-      <input name="competitors" placeholder="Competitors">
-      <button type="submit">Add</button>
-    </form>
+    
+{{#productValidationErrors}}
+  <p style="color:red;">{{.}}</p>
+{{/productValidationErrors}}
 
-    <hr>
+<form action="/addProduct" method="POST" class="stack-form">
+  <input type="hidden" name="username" value="{{username}}">
+  <input name="item" placeholder="Item" required value="{{addProductForm.item}}">
+  <input name="price" placeholder="Price" required value="{{addProductForm.price}}">
+  <input name="amount_sold" placeholder="Sold" required value="{{addProductForm.amount_sold}}">
+  <input name="amount_stocked" placeholder="Stocked" required value="{{addProductForm.amount_stocked}}">
+  <input name="discounts" placeholder="Discount" value="{{addProductForm.discounts}}">
+  <input name="popularity" placeholder="Popularity" value="{{addProductForm.popularity}}">
+  <input name="competitors" placeholder="Competitors" value="{{addProductForm.competitors}}">
+  <button type="submit">Add</button>
+</form>  
 
     <h2>Stores</h2>
+
+   <div class="table-container"> 
     <table border="1">
       <tr>
         <th>Name</th>
@@ -100,20 +145,9 @@
       </tr>
       {{/stores}}
     </table>
+     </div>
 
-     <h3>Add Store</h3>
-    <form action="/addStore" method="POST">
-      <input type="hidden" name="username" value="{{username}}">
-      <input name="name" placeholder="Name" required>
-      <input name="customers_served" placeholder="Customers Served" required>
-      <input name="products_stocked" placeholder="Products Stocked" required>
-      <input name="competitors" placeholder="Competitors">
-      <input name="financial_position" placeholder="Financial Position">
-      <input name="product_shipments" placeholder="Shipments">
-      <button type="submit">Add</button>
-    </form>
-
-    <br />
+     <br />
     <a href="/mypage">Log Out</a>
   </body>
   <script>
@@ -174,12 +208,17 @@ document.querySelectorAll(".saveBtn").forEach(btn => {
 </form>
 
 {{#stockResult}}
-  <p><strong>{{item}}</strong> sells <strong>{{sold}}</strong> units per month.</p>
-  <p>You should stock <strong>{{yearly}}</strong> units per year.</p>
+  <div class="result success">
+    <p><strong>{{item}}</strong> sells <strong>{{sold}}</strong> units per month.</p>
+    <p>You should stock <strong>{{yearly}}</strong> units per year.</p>
+  </div>
 {{/stockResult}}
 
+<!-- ERROR CASE -->
 {{#stockError}}
-  <p style="color:red;">{{stockError}}</p>
+  <div class="result error">
+    <p>{{stockError}}</p>
+  </div>
 {{/stockError}}
 
 <h2>Yearly Sales Revenue Calculator</h2>
@@ -192,15 +231,20 @@ document.querySelectorAll(".saveBtn").forEach(btn => {
 </form>
 
 {{#revenueResult}}
-  <p><strong>{{item}}</strong> sells <strong>{{sold}}</strong> units per month at ${{price}} each.</p>
-  <p>Estimated yearly revenue: <strong>${{yearlyRevenue}}</strong></p>
+  <div class="result success">
+    <p><strong>{{item}}</strong> sells <strong>{{sold}}</strong> units per month at ${{price}} each.</p>
+    <p>Estimated yearly revenue: <strong>${{yearlyRevenue}}</strong></p>
+  </div>
 {{/revenueResult}}
 
+<!-- ERROR -->
 {{#revenueError}}
-  <p style="color:red;">{{revenueError}}</p>
+  <div class="result error">
+    <p>{{revenueError}}</p>
+  </div>
 {{/revenueError}}
 
 <a href="/dashboard?username={{username}}">Dashboard</a>
 
 </html>
-
+    
